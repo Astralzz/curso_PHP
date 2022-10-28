@@ -1,6 +1,6 @@
 <?php
 
-//Servidor/ip
+//Servidor/ip/?puerto
 $SERVIDOR = "localhost:3307"; //127.0.0.1
 //Usuario
 $USUARIO = "root";
