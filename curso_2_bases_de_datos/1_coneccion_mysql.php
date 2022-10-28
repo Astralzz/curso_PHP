@@ -19,6 +19,13 @@ try {
   //Si tubo éxito
   echo "<h1> ÉXITO, SE ESTABLECIÓ LA CONEXIÓN CON MYSQL</h1>";
 
+  //INSERTAR DATOS
+  //Consulta
+  $Sql = "INSERT INTO `fotos` (`id`, `nombre`, `ruta`, `descripcion`) VALUES (NULL, 'Naruto.png', 'C:\\Users\\Jesus C\\Pictures\\2 monitores\\1', 'Naruto peleando con Pain');";
+
+  //Env consulta
+  $Connection->exec($Sql);
+
   //Error en la conexión
 } catch (PDOException $err) {
   echo "<h1> ERROR AL CONECTAR A MYSQL, err ->" . $err . " </h1>";
