@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Funciones PHP</title>
+</head>
+
+<!-- Cuerpo -->
+
+<body>
+
+  <!-- Funciones -->
+  <div style="text-align:center" id="Caja">
+    <!-- Formulario -->
+    <form action="./5_funciones.php" method="get">
+      <!-- Titulo -->
+      <h2>Operación con 2 números</h2>
+
+      <!-- Numero 1 -->
+      <h3>Acción con 2 números</h3>
+      <hr>
+      Numero 1 <br>
+      <input id="n1" type="number" name="n1" value="" placeholder="123">
+      <button type="button" onclick="n1Aleatorio()">Aleatorio</button>
+      <br>
+      Numero 2 <br>
+      <input id="n2" type="number" name="n2" value="" placeholder="123">
+      <button type="button" onclick="n2Aleatorio()">Aleatorio</button>
+      <br><br>
+      <select name="opción" id="Seleccion">
+        <option value="+">Suma</option>
+        <option value="-">Resta</option>
+        <option value="/">Division</option>
+        <option value="*">Multiplication</option>
+      </select>
+      <br><br>
+      <button id="BotonENV" type="submit" disabled> Calcular datos</button>
+
+    </form>
+
+    <!-- Código JS -->
+    <script>
+
+      //Input de n1
+      let n1 = document.getElementById("n1");
+      //Input de n1
+      let n2 = document.getElementById("n2");
+      //Boton
+      let Boton = document.getElementById("BotonENV");
+
+      //Numero aleatorio de Min a Max
+      function noAleatorio(min, max) {
+        let posibilidades = max - min;
+        let n = Math.random() * posibilidades;
+        n = Math.round(n);
+        return parseInt(min) + n;
+      }
+
+      // Para n1
+      function n1Aleatorio() {
+        //Le asignamos un n aleatorio
+        n1.value = noAleatorio(10, 1000) * 100;
+      }
+
+      // Para n1
+      function n2Aleatorio() {
+        //Le asignamos un n aleatorio
+        n2.value = noAleatorio(10, 1000) * 100;
+      }
+
+      //Comprobar input
+      function comprobarInput() {
+        //Activar
+        if (n1.value.length <= 0 || n2.value.length <= 0) {
+          Boton.disabled = true;
+          return;
+        }
+        //Desactivamos
+        Boton.disabled = false;
+      }
+
+      //Eventos de mouse
+      function eventosRatón() {
+
+        //Evento de ratón dentro del div
+        // mouseenter
+        // Reacciona cuando el ratón pasa sobre el elemento. 
+        // Solo afecta al contenedor al que se le añadio el evento, 
+        // no afecta a los elementos hijo.
+        let Caja = document.getElementById('Caja');
+        Boton.addEventListener('mouseenter', function () {
+          comprobarInput();
+        });
+        // mouseover
+        // Este evento resulta muy parecido a mouseenter, 
+        // la diferencia es que reacciona aún cuando el mouse se encuentra 
+        // dentro de los elementos hijo.
+        Caja.addEventListener('mouseover', function () {
+          comprobarInput();
+        });
+        n1.addEventListener('mouseover', function () {
+          n1.focus();
+        });
+        n2.addEventListener('mouseover', function () {
+          n2.focus();
+        });
+        //mouseleave
+        //Sale del elemento
+        n1.addEventListener('mouseleave', function () {
+          n1.blur();
+        });
+        n2.addEventListener('mouseleave', function () {
+          n2.blur();
+        });
+
+      }
+      eventosRatón();
+    </script>
+
+
+  </div>
+
+</body>
+
+</html>
