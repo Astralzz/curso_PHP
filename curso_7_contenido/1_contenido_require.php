@@ -1,0 +1,3 @@
+<?php
+//Saludo
+echo "HOLA, SOY LA INFORMACIÓN DEL ARCHIVO DE REQUIRE XD";
