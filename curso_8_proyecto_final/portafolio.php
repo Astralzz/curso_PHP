@@ -5,6 +5,17 @@
 <?php include "./conexion.php" ?>
 
 <?php
+//Funciones
+function adjuntarArchivo(array $Archivo, string $rutaNueva)
+{
+  //Obtenemos nombre temporal
+  $rutaTemporal = $Archivo["tmp_name"];
+
+  //Movemos archivo a la ruta nueva
+  move_uploaded_file($rutaTemporal, $rutaNueva);
+}
+
+
 //Variables
 $BaseDeDatos = "albun_curso_php";
 //Creamos una conexion
@@ -24,15 +35,74 @@ if ($ObjConexion->conectar()) {
 }
 
 
-//Cuando haya envió
-if ($_POST) {
-}
-//   //Ejecutamos una consulta
-//   $Consulta = "INSERT INTO `archivos` 
-// (`id`, `nombre`, `ruta`, `descripcion`) 
-// VALUES (NULL, 'ejemplo3', 'seffffss', 'aaftttd');";
-//   $ObjConexion->ejecutarSql($Consulta);
+//INSERTAR
+//Cuando haya envió post
+if ($_POST && $ObjConexion !== null) {
+  //Comprobamos que sea el nombre y el archivo
+  if (isset($_POST["nombre"]) && isset($_FILES["archivo"])) {
+    //Obtenemos datos
+    $Nombre = $_POST["nombre"]; //Nombre
+    $ArchivoNombre = $_FILES["archivo"]["name"]; //Nombre del archivo
+    $Descripcion = (isset($_POST["descripcion"])) ? $_POST["descripcion"] : ""; //Descripcion
 
+    //Obtenemos fecha 
+    $fechaActual = new DateTime();
+    //Convertimos fecha a dígitos
+    $fechaActual = $fechaActual->getTimestamp();
+    //Actualizamos ruta
+    $ruta = "archivosGuardados/" . $fechaActual . "_" . $ArchivoNombre;
+
+    //Creamos consulta
+    $Consulta = "INSERT INTO `archivos` 
+    (`id`, `nombre`, `ruta`, `descripcion`) 
+    VALUES (NULL, '$Nombre', '$ruta', '$Descripcion');";
+    //Agregamos
+    $Respuesta = $ObjConexion->ejecutarSql($Consulta);
+
+    //Comprobamos
+    if ($Respuesta !== null) {
+      //Guardamos archivo 
+      $Archivo = $_FILES["archivo"];
+      //Adjuntamos archivo a la carpeta img
+      adjuntarArchivo($Archivo, $ruta);
+      //Actualizamos pagina
+      header("Location:./portafolio.php");
+    }
+  }
+}
+
+//ELIMINAR
+//Cuando haya envió get
+if ($_GET && $ObjConexion !== null) {
+
+  //Comprobamos que sea el de eliminar
+  if (isset($_GET["idEliminar"])) {
+    //Guardamos id
+    $idEliminar = $_GET["idEliminar"];
+    //Creamos consulta para obtener la ruta
+    $Sql = "SELECT ruta FROM archivos WHERE `archivos`.`id` = $idEliminar";
+    //Buscamos ruta
+    $respuestaBúsqueda = $ObjConexion->consultarInf($Sql);
+
+    //Comprobamos búsqueda para eliminar en la bd
+    if ($respuestaBúsqueda !== null) {
+      //Creamos consulta
+      $Sql = "DELETE FROM archivos WHERE `archivos`.`id` = $idEliminar";
+      //Eliminamos
+      $respuestaEliminar = $ObjConexion->ejecutarSql($Sql);
+
+      //Comprobamos para eliminar archivo
+      if ($respuestaEliminar !== null) {
+        //Obtenemos ruta
+        $ruta =  $respuestaBúsqueda[0]["ruta"];
+        //Eliminamos archivo con la ruta
+        unlink($ruta);
+        //Actualizamos pagina
+        header("Location:./portafolio.php");
+      }
+    }
+  }
+}
 ?>
 
 <!-- Portafolio -->
@@ -51,17 +121,17 @@ if ($_POST) {
         <!-- Nombre -->
         <div class="mb-3">
           <label for="Imagen 1" class="form-label">Nombre del archivo</label>
-          <input name="nombre" type="text" class="form-control form-control-sm">
+          <input required name="nombre" type="text" class="form-control form-control-sm">
         </div>
         <!-- Selección de archivo -->
         <div class="mb-3">
           <label for="formFile" class="form-label">Selecciona un archivo</label>
-          <input name="archivo" type="file" class="form-control form-control-sm">
+          <input required name="archivo" type="file" class="form-control form-control-sm">
         </div>
         <!-- Descripcion  -->
         <div class="mb-3">
           <label for="exampleFormControlTextarea1" class="form-label">Descripcion</label>
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+          <textarea name="descripcion" class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
         </div>
         <!-- Boton -->
         <button type="submit" class="btn btn-primary">Aceptar</button>
@@ -84,9 +154,9 @@ if ($_POST) {
             <tr>
               <th scope="col">No</th>
               <th scope="col">Nombre</th>
-              <th scope="col">Archivo</th>
+              <th scope="col">Imagen</th>
               <th scope="col">Descripcion</th>
-              <th scope="col">Acción</th>
+              <th style="text-align: center;" scope="col">Acción</th>
             </tr>
           </thead>
           <!-- Filas -->
@@ -98,10 +168,21 @@ if ($_POST) {
             ?>
                 <tr class="FilaT">
                   <td scope="row">1</td>
+                  <!-- Nombre de la imagen -->
                   <td><?php echo $value["nombre"] ?></td>
-                  <td><?php echo $value["ruta"] ?></td>
+                  <!-- Ruta / Imagen -->
+                  <td>
+                    <!-- <php echo $value["ruta"] ?> -->
+                    <img width="120" src=<?php echo './' . $value['ruta'] ?> class="img-fluid" alt=<?php echo $value['ruta'] ?>>
+                  </td>
+                  <!-- Descripcion -->
                   <td><?php echo $value["descripcion"] ?></td>
-                  <td>Eliminar</td>
+                  <td style="text-align: center;">
+                    <!-- Eliminar -->
+                    <button onclick="borrarDato(this)" value=<?php echo $value["id"] ?> type="button" class="btn btn-danger">
+                      <i class="bi bi-trash-fill"></i>
+                    </button>
+                  </td>
                 </tr>
             <?php }
             } ?>

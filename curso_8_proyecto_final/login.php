@@ -90,7 +90,7 @@ if ($_POST) {
               <!-- Boton de Google -->
               <div class="d-grid mb-2">
                 <button class="btn btn-google btn-login text-uppercase fw-bold" type="submit">
-                  <i class="fab fa-google me-2"></i> Entrar con Google
+                <i class="bi bi-google"></i> Entrar con Google
                 </button>
               </div>
               <!-- Boton de Facebook -->

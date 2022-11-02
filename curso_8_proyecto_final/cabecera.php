@@ -57,20 +57,20 @@ if (isset($_SESSION["sesión"])) {
       <!-- Inicio -->
       <li class="nav-item">
         <!-- Comprobamos en que clase estamos -->
-        <a class="nav-link" href="./index.php">
+        <a class="nav-link text-dark" href="./index.php">
           <i class="bi bi-house-fill"></i>
           Inicio
         </a>
       </li>
       <!-- Portafolio -->
       <li class="nav-item">
-        <a class="nav-link" href="./portafolio.php">
+        <a class="nav-link text-dark" href="./portafolio.php">
           <i class="bi bi-folder-fill"></i>
           Portafolio</a>
       </li>
       <!-- Cerrar cesión -->
       <li class="nav-item">
-        <a class="nav-link" href="./cerrar.php">
+        <a class="nav-link text-dark" href="./cerrar.php">
           <i class="bi bi-x-circle-fill"></i>
           Cerrar sesión</a>
       </li>

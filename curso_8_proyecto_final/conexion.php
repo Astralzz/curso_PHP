@@ -61,21 +61,21 @@ class ConectarBD
       try {
         //Env consulta
         $this->Conexión->exec($Sql);
-        //Retornamos id del resultado
+        //Retornamos id del componente
         return $this->Conexión->lastInsertId();
 
         //Error con la conexion
       } catch (PDOException $err) {
         //Actualizamos estado
         $this->Estado = false;
-        //Retornamos
+        //Retornamos nulo
         echo " ERROR DE CONEXION, err ->" . $err;
         return null;
         //Error desconocido
       } catch (\Throwable $th) {
         //Actualizamos estado
         $this->Estado = false;
-        //Retornamos
+        //Retornamos nulo
         echo " ERROR DESCONOCIDO, err ->" . $th;
         return null;
       }
@@ -90,13 +90,13 @@ class ConectarBD
     //Si se creo la conexion
     if ($this->Estado) {
       try {
-        
+
         //Creamos una sentencia y preparamos
         $Sentencia = $this->Conexión->prepare($Sql);
         //Ejecutamos sentencia
-        $Sentencia -> execute();
+        $Sentencia->execute();
         //Retornamos inf
-        return $Sentencia -> fetchAll();
+        return $Sentencia->fetchAll();
 
         //Error con la conexion
       } catch (PDOException $err) {
